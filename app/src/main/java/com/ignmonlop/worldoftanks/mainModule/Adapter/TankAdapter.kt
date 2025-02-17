@@ -1,5 +1,6 @@
 package com.ignmonlop.worldoftanks.mainModule.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -27,16 +28,20 @@ class TankAdapter(
     class TankViewHolder(private val binding: ItemTankBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(tank: Tank, onFavorite:(Tank) -> Unit) {
             binding.tvTankModel.text = tank.model
-            binding.tvTankPeso.text = tank.weigth
+            binding.tvTankPeso.text = tank.weight.toString()
             binding.tvTankOrigin.text = tank.originCountry
             binding.tvTankManufacturer.text = tank.manufacturer
 
-            // Cargar imagen con Glide
+            Log.i("prueba123", "${tank}")
+
             Glide.with(binding.ivTankImg.context)
-                .load(tank.imageURL)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.drawable.ic_android)
+                .load(tank.imageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .placeholder(R.drawable.ic_preview)
+                .error(R.drawable.ic_android)
                 .into(binding.ivTankImg)
+
 
             val isFavorite= TanksApplication.favoritos.contains(tank)
             binding.ivFavorite.isChecked = isFavorite
