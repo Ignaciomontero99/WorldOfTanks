@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">WorldOfTanks</string>
+    <string name="nombre_zona">Nombre de la zona</string>
+    <string name="imagen_tank">Imagen del tanque</string>
+    <string name="nombre_tank">Nombre del tanque</string>
+    <string name="model_tank">Modelo del tanque</string>
+    <string name="peso_tank">Peso del tanque</string>
+    <string name="originCountry_tank">OriginCountry del tanque</string>
+    <string name="manufacturer_tank">Manufacturer del tanque</string>
+    <string name="description_tank_favorite">Tanques favoritos</string>
+    <string name="description_back">Volver atras.</string>
 </resources>

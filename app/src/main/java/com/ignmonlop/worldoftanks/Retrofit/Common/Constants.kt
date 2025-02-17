@@ -4,6 +4,7 @@ import com.ignmonlop.worldoftanks.Retrofit.Service.WOTService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 object Constants {
     // const val BASE_URL = "http://juguetes.navelsystems.com"
     const val BASE_URL = "https://juguetes.free.beeceptor.com"
@@ -11,7 +12,7 @@ object Constants {
     const val TANKS_PATH = "/tanks"
     const val ZONES_PATH = "/zones"
 
-    val apiService: WOTService by lazy {
+    val service: WOTService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

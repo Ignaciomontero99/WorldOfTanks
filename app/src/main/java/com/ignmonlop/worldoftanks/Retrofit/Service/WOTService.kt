@@ -1,6 +1,5 @@
 package com.ignmonlop.worldoftanks.Retrofit.Service
 
-import android.telecom.Call
 import com.ignmonlop.worldoftanks.Retrofit.Common.Constants
 import com.ignmonlop.worldoftanks.Retrofit.Data.Tank
 import com.ignmonlop.worldoftanks.Retrofit.Data.Zone
