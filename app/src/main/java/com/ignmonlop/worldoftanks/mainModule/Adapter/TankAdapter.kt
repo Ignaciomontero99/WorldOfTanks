@@ -14,7 +14,8 @@ import com.ignmonlop.worldoftanks.TanksApplication
 import com.ignmonlop.worldoftanks.databinding.ItemTankBinding
 
 class TankAdapter(
-    private val onFavorite: (Tank) -> Unit
+    private val onFavorite: (Tank) -> Unit,
+    private val onTankClick: (Tank) ->Unit
 ) : ListAdapter<Tank, TankAdapter.TankViewHolder>(JoyDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TankViewHolder {
         val binding = ItemTankBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,11 +23,11 @@ class TankAdapter(
     }
 
     override fun onBindViewHolder(holder: TankViewHolder, position: Int) {
-        holder.bind(getItem(position), onFavorite)
+        holder.bind(getItem(position), onFavorite, onTankClick)
     }
 
     class TankViewHolder(private val binding: ItemTankBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(tank: Tank, onFavorite:(Tank) -> Unit) {
+        fun bind(tank: Tank, onFavorite:(Tank) -> Unit, onTankClicked: (Tank) -> Unit) {
             binding.tvTankModel.text = tank.model
             binding.tvTankPeso.text = tank.weight.toString()
             binding.tvTankOrigin.text = tank.originCountry
@@ -53,6 +54,10 @@ class TankAdapter(
                     TanksApplication.eliminarFavorito(tank)
                 }
                 onFavorite(tank)
+            }
+
+            binding.root.setOnClickListener {
+                onTankClicked(tank) // Llamar al manejador de clic en el tanque
             }
         }
     }

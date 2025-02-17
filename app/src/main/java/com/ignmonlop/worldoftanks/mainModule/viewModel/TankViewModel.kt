@@ -15,7 +15,7 @@ import java.io.IOException
 
 class TankViewModel: ViewModel() {
     private val _tank = MutableLiveData<List<Tank>>()
-    val zones get() = _tank
+    val tanks get() = _tank
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage

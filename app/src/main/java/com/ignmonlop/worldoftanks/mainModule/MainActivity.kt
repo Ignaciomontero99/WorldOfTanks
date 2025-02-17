@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ignmonlop.worldoftanks.Retrofit.Data.Tank
+import com.ignmonlop.worldoftanks.Retrofit.Data.Zone
 import com.ignmonlop.worldoftanks.TanksApplication
 import com.ignmonlop.worldoftanks.databinding.ActivityMainBinding
 import com.ignmonlop.worldoftanks.mainModule.Adapter.TankAdapter
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var tankAdapter: TankAdapter
-    private lateinit var zoneAdapter: ZoneAdapter  // Agregar ZoneAdapter
+    private lateinit var zoneAdapter: ZoneAdapter
     private lateinit var viewModelTank: TankViewModel
     private lateinit var viewModelZone: ZoneViewModel
     private lateinit var sharedPreferences: SharedPreferences
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         viewModelZone = ViewModelProvider(this)[ZoneViewModel::class.java]
         viewModelZone.fetchZones()
 
-        viewModelTank.zones.observe(this) { tanks ->
+        viewModelTank.tanks.observe(this) { tanks ->
             if(tanks.isEmpty()){
                 Log.d("MainActivity", "Lista de Tanques vacía")
             } else {
@@ -83,15 +84,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerViews() {
         // Configuración del RecyclerView de tanques
-        tankAdapter = TankAdapter { tank -> onFavoriteClicked(tank) }
+        tankAdapter = TankAdapter (
+            { tank -> onFavoriteClicked(tank) },
+            { tank -> onTankClicked(tank) }
+        )
         mBinding.recyclerViewTank.layoutManager = LinearLayoutManager(this)
         mBinding.recyclerViewTank.adapter = tankAdapter
 
         // Configuración del RecyclerView de zonas
-        zoneAdapter = ZoneAdapter()  // Crear y asignar el Adapter de zonas
+        zoneAdapter = ZoneAdapter { zone -> onZoneClicked(zone) }
         mBinding.recyclerViewZone.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        mBinding.recyclerViewZone.adapter = zoneAdapter  // Asignamos el Adapter del RecyclerView de zonas
+        mBinding.recyclerViewZone.adapter = zoneAdapter
     }
+
+    private fun onTankClicked(tank: Tank) {
+        Log.d("onTankClicked", "Tank ID: ${tank.id}")  // Verifica si el ID es correcto aquí
+        TanksApplication.agregarFavorito(tank)
+        val intent = Intent(this, DetailTankActivity::class.java)
+        intent.putExtra("id", tank.id)
+        startActivity(intent)
+    }
+
+
+    private fun onZoneClicked(zone: Zone) {
+        val intent = Intent(this, DetailZoneActivity::class.java).apply {
+            putExtra("ZONE_ID", zone.id)
+        }
+        startActivity(intent)
+    }
+
 
     private fun onFavoriteClicked(tank: Tank) {
         if (TanksApplication.favoritos.contains(tank)) {
@@ -127,4 +148,6 @@ class MainActivity : AppCompatActivity() {
         val type = object : TypeToken<MutableList<Tank>>() {}.type
         return gson.fromJson(json, type) ?: mutableListOf()
     }
+
+
 }

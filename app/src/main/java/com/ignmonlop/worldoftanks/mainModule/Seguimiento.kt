@@ -1,5 +1,6 @@
 package com.ignmonlop.worldoftanks.mainModule
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,10 +18,18 @@ class Seguimiento : AppCompatActivity() {
         setContentView(binding.root)
 
         // Configurar RecyclerView
-        adapter = TankAdapter { tank ->
-            TanksApplication.eliminarFavorito(tank)
-            adapter.submitList(TanksApplication.obtenerFavoritos().toList())
-        }
+        adapter = TankAdapter(
+            onFavorite = { tank ->
+                TanksApplication.eliminarFavorito(tank)
+                adapter.submitList(TanksApplication.obtenerFavoritos().toList())
+            },
+            onTankClick = { tank ->
+                val intent = Intent(this, DetailTankActivity::class.java).apply {
+                    putExtra("id", tank.id)
+                }
+                startActivity(intent)
+            }
+        )
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
